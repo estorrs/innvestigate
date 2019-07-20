@@ -8,8 +8,8 @@ from __future__ import\
 ###############################################################################
 
 
-import keras.backend as K
-import keras.utils
+import tensorflow.keras.backend as K
+import tensorflow.keras.utils
 import math
 
 

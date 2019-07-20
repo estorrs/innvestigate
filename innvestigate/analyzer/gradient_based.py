@@ -8,15 +8,15 @@ from __future__ import\
 ###############################################################################
 
 
-import keras.models
-import keras
+import tensorflow.keras.models
+import tensorflow.keras
 
 
 from . import base
 from . import wrapper
 from .. import layers as ilayers
 from .. import utils as iutils
-from ..utils import keras as kutils
+from ..utils import tensorflow.keras as kutils
 from ..utils.keras import checks as kchecks
 from ..utils.keras import graph as kgraph
 
@@ -171,7 +171,7 @@ class InputTimesGradient(Gradient):
 class DeconvnetReverseReLULayer(kgraph.ReverseMappingBase):
 
     def __init__(self, layer, state):
-        self._activation = keras.layers.Activation("relu")
+        self._activation = tensorflow.keras.layers.Activation("relu")
         self._layer_wo_relu = kgraph.copy_layer_wo_activation(
             layer,
             name_template="reversed_%s",
@@ -217,7 +217,7 @@ class Deconvnet(base.ReverseAnalyzerBase):
 
 
 def GuidedBackpropReverseReLULayer(Xs, Ys, reversed_Ys, reverse_state):
-    activation = keras.layers.Activation("relu")
+    activation = tensorflow.keras.layers.Activation("relu")
     # Apply relus conditioned on backpropagated values.
     reversed_Ys = kutils.apply(activation, reversed_Ys)
 

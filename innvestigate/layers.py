@@ -8,12 +8,12 @@ from builtins import range, zip
 ###############################################################################
 ###############################################################################
 
-import keras
-import keras.backend as K
-import keras.constraints
-import keras.layers
-import keras.regularizers
-from keras.utils import conv_utils
+import tensorflow.keras
+import tensorflow.keras.backend as K
+import tensorflow.keras.constraints
+import tensorflow.keras.layers
+import tensorflow.keras.regularizers
+from tensorflow.keras.utils import conv_utils
 import numpy as np
 
 
@@ -156,11 +156,11 @@ class GradientWRT(keras.layers.Layer):
             return [x for c, x in zip(self.mask, input_shapes[:self.n_inputs])
                     if c]
 
-    # todo: remove once keras is fixed.
+    # todo: remove once tensorflow.keras is fixed.
     # this is a workaround for cases when
     # wrapper and skip connections are used together.
-    # bring the fix into keras and remove once
-    # keras is patched.
+    # bring the fix into tensorflow.keras and remove once
+    # tensorflow.keras is patched.
     def compute_mask(self, inputs, mask=None):
         """Computes an output mask tensor.
 

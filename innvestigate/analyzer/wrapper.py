@@ -9,15 +9,15 @@ from builtins import zip
 ###############################################################################
 
 
-import keras.models
-import keras.backend as K
+import tensorflow.keras.models
+import tensorflow.keras.backend as K
 import numpy as np
 
 
 from . import base
 from .. import layers as ilayers
 from .. import utils as iutils
-from ..utils import keras as kutils
+from ..utils import tensorflow.keras as kutils
 
 
 __all__ = [
@@ -97,7 +97,7 @@ class AugmentReduceBase(WrapperBase):
                                                 *args, **kwargs)
 
         if isinstance(self._subanalyzer, base.AnalyzerNetworkBase):
-            # Take the keras analyzer model and
+            # Take the tensorflow.keras analyzer model and
             # add augment and reduce functionality.
             self._keras_based_augment_reduce = True
         else:
@@ -134,7 +134,7 @@ class AugmentReduceBase(WrapperBase):
         new_outputs = iutils.to_list(self._reduce(tmp))
         new_constant_inputs = self._keras_get_constant_inputs()
 
-        new_model = keras.models.Model(
+        new_model = tensorflow.keras.models.Model(
             inputs=inputs+extra_inputs+new_constant_inputs,
             outputs=new_outputs+extra_outputs)
         self._subanalyzer._analyzer_model = new_model
@@ -270,7 +270,7 @@ class PathIntegrator(AugmentReduceBase):
     def _keras_set_constant_inputs(self, inputs):
         tmp = [K.variable(x) for x in inputs]
         self._keras_constant_inputs = [
-            keras.layers.Input(tensor=x, shape=x.shape[1:])
+            tensorflow.keras.layers.Input(tensor=x, shape=x.shape[1:])
             for x in tmp]
 
     def _keras_get_constant_inputs(self):

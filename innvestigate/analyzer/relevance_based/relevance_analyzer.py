@@ -9,17 +9,17 @@ import six
 ###############################################################################
 
 import inspect
-import keras
-import keras.backend as K
-import keras.engine.topology
-import keras.models
-import keras.layers
-import keras.layers.convolutional
-import keras.layers.core
-import keras.layers.local
-import keras.layers.noise
-import keras.layers.normalization
-import keras.layers.pooling
+import tensorflow.keras
+import tensorflow.keras.backend as K
+import tensorflow.keras.engine.topology
+import tensorflow.keras.models
+import tensorflow.keras.layers
+import tensorflow.keras.layers.convolutional
+import tensorflow.keras.layers.core
+import tensorflow.keras.layers.local
+import tensorflow.keras.layers.noise
+import tensorflow.keras.layers.normalization
+import tensorflow.keras.layers.pooling
 
 
 from .. import base
@@ -84,54 +84,54 @@ class BaselineLRPZ(base.AnalyzerNetworkBase):
     def __init__(self, model, **kwargs):
         # Inside function to not break import if Keras changes.
         BASELINELRPZ_LAYERS = (
-            keras.engine.topology.InputLayer,
-            keras.layers.convolutional.Conv1D,
-            keras.layers.convolutional.Conv2D,
-            keras.layers.convolutional.Conv2DTranspose,
-            keras.layers.convolutional.Conv3D,
-            keras.layers.convolutional.Conv3DTranspose,
-            keras.layers.convolutional.Cropping1D,
-            keras.layers.convolutional.Cropping2D,
-            keras.layers.convolutional.Cropping3D,
-            keras.layers.convolutional.SeparableConv1D,
-            keras.layers.convolutional.SeparableConv2D,
-            keras.layers.convolutional.UpSampling1D,
-            keras.layers.convolutional.UpSampling2D,
-            keras.layers.convolutional.UpSampling3D,
-            keras.layers.convolutional.ZeroPadding1D,
-            keras.layers.convolutional.ZeroPadding2D,
-            keras.layers.convolutional.ZeroPadding3D,
-            keras.layers.core.Activation,
-            keras.layers.core.ActivityRegularization,
-            keras.layers.core.Dense,
-            keras.layers.core.Dropout,
-            keras.layers.core.Flatten,
-            keras.layers.core.Lambda,
-            keras.layers.core.Masking,
-            keras.layers.core.Permute,
-            keras.layers.core.RepeatVector,
-            keras.layers.core.Reshape,
-            keras.layers.core.SpatialDropout1D,
-            keras.layers.core.SpatialDropout2D,
-            keras.layers.core.SpatialDropout3D,
-            keras.layers.local.LocallyConnected1D,
-            keras.layers.local.LocallyConnected2D,
-            keras.layers.Add,
-            keras.layers.Concatenate,
-            keras.layers.Dot,
-            keras.layers.Maximum,
-            keras.layers.Minimum,
-            keras.layers.Subtract,
-            keras.layers.noise.AlphaDropout,
-            keras.layers.noise.GaussianDropout,
-            keras.layers.noise.GaussianNoise,
-            keras.layers.normalization.BatchNormalization,
-            keras.layers.pooling.GlobalMaxPooling1D,
-            keras.layers.pooling.GlobalMaxPooling2D,
-            keras.layers.pooling.GlobalMaxPooling3D,
-            keras.layers.pooling.MaxPooling1D,
-            keras.layers.pooling.MaxPooling2D,
-            keras.layers.pooling.MaxPooling3D,
+            tensorflow.keras.engine.topology.InputLayer,
+            tensorflow.keras.layers.convolutional.Conv1D,
+            tensorflow.keras.layers.convolutional.Conv2D,
+            tensorflow.keras.layers.convolutional.Conv2DTranspose,
+            tensorflow.keras.layers.convolutional.Conv3D,
+            tensorflow.keras.layers.convolutional.Conv3DTranspose,
+            tensorflow.keras.layers.convolutional.Cropping1D,
+            tensorflow.keras.layers.convolutional.Cropping2D,
+            tensorflow.keras.layers.convolutional.Cropping3D,
+            tensorflow.keras.layers.convolutional.SeparableConv1D,
+            tensorflow.keras.layers.convolutional.SeparableConv2D,
+            tensorflow.keras.layers.convolutional.UpSampling1D,
+            tensorflow.keras.layers.convolutional.UpSampling2D,
+            tensorflow.keras.layers.convolutional.UpSampling3D,
+            tensorflow.keras.layers.convolutional.ZeroPadding1D,
+            tensorflow.keras.layers.convolutional.ZeroPadding2D,
+            tensorflow.keras.layers.convolutional.ZeroPadding3D,
+            tensorflow.keras.layers.core.Activation,
+            tensorflow.keras.layers.core.ActivityRegularization,
+            tensorflow.keras.layers.core.Dense,
+            tensorflow.keras.layers.core.Dropout,
+            tensorflow.keras.layers.core.Flatten,
+            tensorflow.keras.layers.core.Lambda,
+            tensorflow.keras.layers.core.Masking,
+            tensorflow.keras.layers.core.Permute,
+            tensorflow.keras.layers.core.RepeatVector,
+            tensorflow.keras.layers.core.Reshape,
+            tensorflow.keras.layers.core.SpatialDropout1D,
+            tensorflow.keras.layers.core.SpatialDropout2D,
+            tensorflow.keras.layers.core.SpatialDropout3D,
+            tensorflow.keras.layers.local.LocallyConnected1D,
+            tensorflow.keras.layers.local.LocallyConnected2D,
+            tensorflow.keras.layers.Add,
+            tensorflow.keras.layers.Concatenate,
+            tensorflow.keras.layers.Dot,
+            tensorflow.keras.layers.Maximum,
+            tensorflow.keras.layers.Minimum,
+            tensorflow.keras.layers.Subtract,
+            tensorflow.keras.layers.noise.AlphaDropout,
+            tensorflow.keras.layers.noise.GaussianDropout,
+            tensorflow.keras.layers.noise.GaussianNoise,
+            tensorflow.keras.layers.normalization.BatchNormalization,
+            tensorflow.keras.layers.pooling.GlobalMaxPooling1D,
+            tensorflow.keras.layers.pooling.GlobalMaxPooling2D,
+            tensorflow.keras.layers.pooling.GlobalMaxPooling3D,
+            tensorflow.keras.layers.pooling.MaxPooling1D,
+            tensorflow.keras.layers.pooling.MaxPooling2D,
+            tensorflow.keras.layers.pooling.MaxPooling3D,
         )
 
         self._add_model_softmax_check()
@@ -231,9 +231,9 @@ class BatchNormalizationReverseLayer(kgraph.ReverseMappingBase):
         # multiplication and then addition. The multiplicative scaling layer
         # has no effect on LRP and functions as a linear activation layer
 
-        minus_mu = keras.layers.Lambda(lambda x: x - K.reshape(self._mean, broadcast_shape))
-        minus_beta = keras.layers.Lambda(lambda x: x - K.reshape(self._beta, broadcast_shape))
-        prepare_div = keras.layers.Lambda(lambda x: x + (K.cast(K.greater_equal(x,0), K.floatx())*2-1)*K.epsilon())
+        minus_mu = tensorflow.keras.layers.Lambda(lambda x: x - K.reshape(self._mean, broadcast_shape))
+        minus_beta = tensorflow.keras.layers.Lambda(lambda x: x - K.reshape(self._beta, broadcast_shape))
+        prepare_div = tensorflow.keras.layers.Lambda(lambda x: x + (K.cast(K.greater_equal(x,0), K.floatx())*2-1)*K.epsilon())
 
 
         x_minus_mu = kutils.apply(minus_mu, Xs)

@@ -9,8 +9,8 @@ from __future__ import\
 
 
 import importlib
-import keras.backend as K
-import keras.layers
+import tensorflow.keras.backend as K
+import tensorflow.keras.layers
 import numpy as np
 import tempfile
 import warnings
@@ -19,7 +19,7 @@ import warnings
 from . import base
 from .. import layers as ilayers
 from .. import utils as iutils
-from ..utils import keras as kutils
+from ..utils import tensorflow.keras as kutils
 from ..utils.keras import checks as kchecks
 from ..utils.keras import graph as kgraph
 
@@ -47,7 +47,7 @@ def _create_deeplift_rules(reference_mapping, approximate_gradient=True):
                 return a*(dy/(dx + K.epsilon()))
 
         grad = ilayers.GradientWRT(len(Xs))
-        rescale = keras.layers.Lambda(rescale_f)
+        rescale = tensorflow.keras.layers.Lambda(rescale_f)
 
         Xs_references = [
             reference_mapping.get(x, local_references.get(x, None))
@@ -79,7 +79,7 @@ def _create_deeplift_rules(reference_mapping, approximate_gradient=True):
                 return a
 
         grad = ilayers.GradientWRT(len(Xs))
-        switch = keras.layers.Lambda(switch_f)
+        switch = tensorflow.keras.layers.Lambda(switch_f)
 
         Xs_references = [reference_mapping[x] for x in Xs]
 
@@ -149,7 +149,7 @@ class DeepLIFT(base.ReverseAnalyzerBase):
         tmp = [K.variable(x) for x in tmp]
 
         constant_reference_inputs = [
-            keras.layers.Input(tensor=x, shape=K.int_shape(x)[1:])
+            tensorflow.keras.layers.Input(tensor=x, shape=K.int_shape(x)[1:])
             for x in tmp
         ]
 
@@ -163,7 +163,7 @@ class DeepLIFT(base.ReverseAnalyzerBase):
         for layer, Xs, Ys in execution_list:
             activations = [self._reference_activations[x] for x in Xs]
 
-            if isinstance(layer, keras.layers.InputLayer):
+            if isinstance(layer, tensorflow.keras.layers.InputLayer):
                 # Special case. Do nothing.
                 next_activations = activations
             else:
@@ -220,7 +220,7 @@ class DeepLIFT(base.ReverseAnalyzerBase):
                 constant_inputs+constant_reference_inputs)
 
     def _head_mapping(self, X):
-        return keras.layers.Subtract()([X, self._reference_activations[X]])
+        return tensorflow.keras.layers.Subtract()([X, self._reference_activations[X]])
 
     def _reverse_model(self,
                        model,

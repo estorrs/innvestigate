@@ -8,17 +8,17 @@ from builtins import zip
 ###############################################################################
 ###############################################################################
 
-import keras
-import keras.backend as K
-import keras.engine.topology
-import keras.models
-import keras.layers
-import keras.layers.convolutional
-import keras.layers.core
-import keras.layers.local
-import keras.layers.noise
-import keras.layers.normalization
-import keras.layers.pooling
+import tensorflow.keras
+import tensorflow.keras.backend as K
+import tensorflow.keras.engine.topology
+import tensorflow.keras.models
+import tensorflow.keras.layers
+import tensorflow.keras.layers.convolutional
+import tensorflow.keras.layers.core
+import tensorflow.keras.layers.local
+import tensorflow.keras.layers.noise
+import tensorflow.keras.layers.normalization
+import tensorflow.keras.layers.pooling
 import numpy as np
 
 
@@ -119,7 +119,7 @@ class EpsilonRule(kgraph.ReverseMappingBase):
     def apply(self, Xs, Ys, Rs, reverse_state):
         grad = ilayers.GradientWRT(len(Xs))
         # The epsilon rule aligns epsilon with the (extended) sign: 0 is considered to be positive
-        prepare_div = keras.layers.Lambda(lambda x: x + (K.cast(K.greater_equal(x,0), K.floatx())*2-1)*self._epsilon)
+        prepare_div = tensorflow.keras.layers.Lambda(lambda x: x + (K.cast(K.greater_equal(x,0), K.floatx())*2-1)*self._epsilon)
 
         # Get activations.
         Zs = kutils.apply(self._layer_wo_act, Xs)
@@ -270,10 +270,10 @@ class AlphaBetaRule(kgraph.ReverseMappingBase):
     def apply(self, Xs, Ys, Rs, reverse_state):
         #this method is correct, but wasteful
         grad = ilayers.GradientWRT(len(Xs))
-        times_alpha = keras.layers.Lambda(lambda x: x * self._alpha)
-        times_beta = keras.layers.Lambda(lambda x: x * self._beta)
-        keep_positives = keras.layers.Lambda(lambda x: x * K.cast(K.greater(x,0), K.floatx()))
-        keep_negatives = keras.layers.Lambda(lambda x: x * K.cast(K.less(x,0), K.floatx()))
+        times_alpha = tensorflow.keras.layers.Lambda(lambda x: x * self._alpha)
+        times_beta = tensorflow.keras.layers.Lambda(lambda x: x * self._beta)
+        keep_positives = tensorflow.keras.layers.Lambda(lambda x: x * K.cast(K.greater(x,0), K.floatx()))
+        keep_negatives = tensorflow.keras.layers.Lambda(lambda x: x * K.cast(K.less(x,0), K.floatx()))
 
 
         def f(layer1, layer2, X1, X2):
@@ -412,8 +412,8 @@ class BoundedRule(kgraph.ReverseMappingBase):
     # TODO: clean up this implementation and add more documentation
     def apply(self, Xs, Ys, Rs, reverse_state):
         grad = ilayers.GradientWRT(len(Xs))
-        to_low = keras.layers.Lambda(lambda x: x * 0 + self._low)
-        to_high = keras.layers.Lambda(lambda x: x * 0 + self._high)
+        to_low = tensorflow.keras.layers.Lambda(lambda x: x * 0 + self._low)
+        to_high = tensorflow.keras.layers.Lambda(lambda x: x * 0 + self._high)
 
         low = [to_low(x) for x in Xs]
         high = [to_high(x) for x in Xs]
@@ -422,7 +422,7 @@ class BoundedRule(kgraph.ReverseMappingBase):
         A = kutils.apply(self._layer_wo_act, Xs)
         B = kutils.apply(self._layer_wo_act_positive, low)
         C = kutils.apply(self._layer_wo_act_negative, high)
-        Zs = [keras.layers.Subtract()([a, keras.layers.Add()([b, c])])
+        Zs = [keras.layers.Subtract()([a, tensorflow.keras.layers.Add()([b, c])])
               for a, b, c in zip(A, B, C)]
 
         # Divide relevances with the value.
@@ -437,7 +437,7 @@ class BoundedRule(kgraph.ReverseMappingBase):
         tmpB = [keras.layers.Multiply()([a, b]) for a, b in zip(low, tmpB)]
         tmpC = [keras.layers.Multiply()([a, b]) for a, b in zip(high, tmpC)]
 
-        tmp = [keras.layers.Subtract()([a, keras.layers.Add()([b, c])])
+        tmp = [keras.layers.Subtract()([a, tensorflow.keras.layers.Add()([b, c])])
                for a, b, c in zip(tmpA, tmpB, tmpC)]
 
         return tmp
@@ -489,7 +489,7 @@ class ZPlusFastRule(kgraph.ReverseMappingBase):
         grad = ilayers.GradientWRT(len(Xs))
 
         #TODO: assert all inputs are positive, instead of only keeping the positives.
-        #keep_positives = keras.layers.Lambda(lambda x: x * K.cast(K.greater(x,0), K.floatx()))
+        #keep_positives = tensorflow.keras.layers.Lambda(lambda x: x * K.cast(K.greater(x,0), K.floatx()))
         #Xs = kutils.apply(keep_positives, Xs)
 
         # Get activations.

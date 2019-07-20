@@ -11,11 +11,11 @@ from __future__ import\
 import pytest
 
 
-from keras.datasets import mnist
-import keras.layers
-import keras.models
-from keras.models import Model
-import keras.optimizers
+from tensorflow.keras.datasets import mnist
+import tensorflow.keras.layers
+import tensorflow.keras.models
+from tensorflow.keras.models import Model
+import tensorflow.keras.optimizers
 import numpy as np
 import unittest
 
@@ -136,7 +136,7 @@ class HaufePatternExample(unittest.TestCase):
 
         X = y * a_s + eps * a_d
 
-        model = keras.models.Sequential(
+        model = tensorflow.keras.models.Sequential(
             [keras.layers.Dense(1, input_shape=(2,), use_bias=True), ]
         )
         model.compile(optimizer=keras.optimizers.Adam(lr=1), loss="mse")
@@ -195,8 +195,8 @@ def train_model(model, data, epochs=20):
 
     x_train, y_train, x_test, y_test = data
     # convert class vectors to binary class matrices
-    y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_test = keras.utils.to_categorical(y_test, num_classes)
+    y_train = tensorflow.keras.utils.to_categorical(y_train, num_classes)
+    y_test = tensorflow.keras.utils.to_categorical(y_test, num_classes)
 
     model.compile(loss='categorical_crossentropy',
                   optimizer=keras.optimizers.RMSprop(),
